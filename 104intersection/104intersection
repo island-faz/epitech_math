@@ -1,0 +1,57 @@
+#!/usr/bin/php
+<?php
+// 104intersection.php for 104intersection in /home/bourhi_a/rendu/104intersection
+// 
+// Made by amine bourhime
+// Login   <bourhi_a@epitech.net>
+// 
+// Started on  Sat Jan  4 11:06:52 2014 
+// Last update Fri Jan 17 14:34:14 2014 
+//
+
+include "functions.php";
+function __autoload($class_name)
+{
+  include $class_name . '.php';
+}
+
+check_args($argc, $argv);
+
+$p = new Point($argv[2], $argv[3], $argv[4]);
+$v = new Point($argv[5], $argv[6], $argv[7]);
+if ($argv[1] == 1)
+  {
+    echo "sphère de rayon " . $argv[8] . "\n";
+    $points = sphere_intersection($argv[8], $v, $p);
+    echo "nombre de points d’intersection : " . count($points) . "\n";
+  }
+ else if ($argv[1] == 2)
+   {
+     echo "cylindre de rayon " . $argv[8] . "\n";
+     $points = cylindre_intersection($argv[8], $v, $p);
+     echo "nombre de points d’intersection : " . count($points) . "\n";
+   }
+ else if ($argv[1] == 3)
+   {
+     echo "cône d’angle " . $argv[8] . " degrés\n";
+     $points = cone_intersection($argv[8], $v, $p);
+     echo "nombre de points d’intersection : " . count($points) . "\n";
+   }
+ else
+   echo "bad args !\n";
+for ($i = 0; $i < count($points); $i++)
+  {
+    echo "point " . ($i + 1) . " : (" .
+      $points[$i]->x . ", " .
+      $points[$i]->y . ", " .
+      $points[$i]->z . ")\n";
+  }
+
+// Droite equation
+// x = Vx * t + x0
+// y = Vy * t + y0
+// z = Vz * t + z0
+
+// (x * x) + (y * y) = R * R						cylindre
+// (x * x) + (y * y) + (z * z) = R * R					sphére
+// (x * x) + (y * y) = (z * z) * (tan(alpha) * tan(alpha))		cone

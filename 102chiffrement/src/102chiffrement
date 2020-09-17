@@ -1,0 +1,84 @@
+#!/usr/bin/php
+<?php
+
+// 102chiffrement.php for 102chiffrement in /home/bourhi_a/rendu/102chiffrement
+// 
+// Made by amine bourhime
+// Login   <bourhi_a@epitech.net>
+// 
+// Started on  Sat Nov 23 06:13:25 2013 
+// Last update Mon Nov 25 15:04:44 2013 
+//
+
+include 'src/functions.php';
+
+function	crypt_message($argc, $argv)
+{
+  $key = check_args($argc, $argv);
+  $hash = message_to_hash($argv[1]);
+  $matrix = matrix_multiply($hash, $key);
+  $crypted_message = "";
+
+  inv_matrix($key);
+  for ($i = 0; $i < count($matrix); $i++)
+    {
+      $cmd = './conv_base/conv ' . $matrix[$i] . ' 0123456789 ' . $argv[6] . ' 0';
+      $crypted_message .= exec($cmd) . " ";
+    }
+  $crypted_message = substr_replace($crypted_message, "", -1);
+  return ($crypted_message);
+}
+
+function	decrypt_message($argc, $argv)
+{
+  $alpha = " abcdefghijklmnopqrstuvwxyz";
+  $key = check_args($argc, $argv);  
+  $key_inv = inv_matrix($key);
+  $array = explode(" ", $argv[1]);
+  $decrypted_message = "";
+
+  for ($i = 0; $i < count($array); $i++)
+    {
+      $cmd = './conv_base/conv ' . $array[$i] . ' 0123456789 ' . $argv[6] .' 1';
+      $array[$i] = exec($cmd);
+    }
+  $array = matrix_multiply($array, $key_inv);
+  for ($i = 0; $i < count($array); $i++)
+    {
+      if ($array[$i] > strlen($alpha) || $array[$i] < 0)
+	WRONG_MESSAGE_TO_CRYPT();
+      $char = $array[$i];
+      $decrypted_message .= $alpha[(int)$char];
+    }
+  if ($decrypted_message[strlen($decrypted_message) - 1] == ' ')
+    $decrypted_message = substr_replace($decrypted_message, "", -1);
+  return ($decrypted_message);
+}
+
+function start($argc, $argv)
+{
+  $key = check_args($argc, $argv);
+  if ($argv[7] == 0)
+    {
+      echo 'chiffrement de "' . $argv[1] . '"';
+      echo " a l'aide de la cle ";
+      for ($i = 0; $i < count($key); $i++)
+	echo $key[$i] . " ";
+      echo 'dans la base "' . $argv[6] . '"' . "\n";
+      echo '=> ' . crypt_message($argc, $argv);
+    }
+  else
+    {
+      echo 'dechifrement de "' . $argv[1] . '"';
+      echo " a l'aide de la cle ";
+      for ($i = 0; $i < count($key); $i++)
+	echo $key[$i] . " ";
+      echo 'dans la base "' . $argv[6] . '"' . "\n";     
+      echo '=> ' . decrypt_message($argc, $argv);
+    }
+  echo "\n";  
+}
+
+start($argc, $argv);
+
+?>

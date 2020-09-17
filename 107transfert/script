@@ -1,0 +1,11 @@
+{
+    a[NR] = $0
+    sum += $2
+}
+END
+{
+    for (x = 1; x <= NR; x++)
+    {
+	print a[x]
+    }
+}

@@ -1,0 +1,15 @@
+#!/usr/bin/php
+<?php
+// main.php for main in /home/bourhi_a/rendu/103architecte
+// 
+// Made by amine bourhime
+// Login   <bourhi_a@epitech.net>
+// 
+// Started on  Tue Dec 10 01:37:18 2013 
+// Last update Thu Dec 12 02:35:41 2013 
+//
+
+include_once "src/functions.php"; 
+
+$argy = check_args($argc, $argv);
+run_103($argy);
